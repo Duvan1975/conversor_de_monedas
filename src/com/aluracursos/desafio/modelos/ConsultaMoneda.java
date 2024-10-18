@@ -20,7 +20,8 @@ public class ConsultaMoneda {
 
     public Moneda conversorDeMoneda (String itemMoneda){
 
-        URI direccion = URI.create("https://v6.exchangerate-api.com/v6/90630bcfb8cf39cf41f573cf/latest/"+itemMoneda);
+        URI direccion = URI.create(
+                "https://v6.exchangerate-api.com/v6/90630bcfb8cf39cf41f573cf/latest/"+itemMoneda);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(direccion)
@@ -30,9 +31,27 @@ public class ConsultaMoneda {
         try {
             response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
+            //Imprime todo el cuerpo de la API
+            //System.out.println(response.body());
         } catch (Exception e) {
             throw new RuntimeException("No se encontró la moneda");
         }
         return new Gson().fromJson(response.body(), Moneda.class);
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
     }
 }
