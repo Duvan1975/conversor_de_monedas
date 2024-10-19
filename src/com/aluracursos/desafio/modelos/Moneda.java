@@ -13,4 +13,12 @@ public class Moneda {
     public Map<String, Double> getConversion_rates() {
         return conversion_rates;
     }
+
+    @Override
+    public String toString() {
+        return "Moneda{" +
+                "base_code='" + base_code + '\'' +
+                ", conversion_rates=" + conversion_rates +
+                '}';
+    }
 }

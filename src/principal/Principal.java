@@ -18,14 +18,15 @@
             System.out.println("Conversor de moneda. Seleccione la opción");
             System.out.println("1. USD >> COP (Dólar Estadounidense a Peso colombiano)");
             System.out.println("2. COP >> USD (Peso colombiano a Dólar Estadounidense)");
+            System.out.println("3. USD >> ARS (Dólar Estadounidense a Peso argentino)");
 
             //Pedir al usuario que seleccione una opción hasta que esta sea válida
-            while (!entradaValida){
+            while (!entradaValida) {
                 try {
                     System.out.println("Digite la opción correcta. (solo números)");
                     indice = teclado.nextInt();
                     entradaValida = true;
-                } catch (InputMismatchException e){
+                } catch (InputMismatchException e) {
                     System.out.println("Opción NO válida, inténtalo de nuevo");
                     teclado.next();
                 }
@@ -35,42 +36,53 @@
             System.out.println("Digite la cantidad de dinero a convertir");
             double cantidad = teclado.nextDouble();
 
+            //Relizar la conversión según la opción
             switch (indice){
-                case 1 : ConsultaMoneda consultaUSD = new ConsultaMoneda("USD", cantidad);
-                    Moneda monedaUSD = consultaUSD.conversorDeMoneda("USD");
-
-                    //Obtenemos la tasa de cambio
-                    Map<String, Double> conversionRatesUSD = monedaUSD.getConversion_rates();
-                    Double tasaCOP = conversionRatesUSD.get("COP");
-
-                    if (tasaCOP != null){
-                        double cantidadConvertidaCOP = cantidad * tasaCOP;
-                        System.out.println(String.format("USD %.2f dólar(es) Estado Unidenses equivalen a: $%.2f pesos colombianos"
-                                ,cantidad, cantidadConvertidaCOP) );
-
-                    } else {
-                        System.out.println("No se encontro la tasa de cambio para pesos colombianos");
-                    }
+                case 1 :
+                    convertirMoneda("USD", "COP", cantidad);
+                    System.out.println("hola");
                     break;
-                case 2 : ConsultaMoneda consultaCOP = new ConsultaMoneda("COP", cantidad);
-                    Moneda monedaCOP = consultaCOP.conversorDeMoneda("COP");
-
-                    //Obtenemos la tasa de cambio
-                    Map<String, Double> conversionRatesCOP = monedaCOP.getConversion_rates();
-                    Double tasaUSD = conversionRatesCOP.get("USD");
-
-                    if (tasaUSD != null){
-                        double cantidadCovertidaUSD = cantidad * tasaUSD;
-                        System.out.println(String.format("$%.2f pesos colombianos equivalen a: USD %.2f dólares Estado Unidenses"
-                                ,cantidad, cantidadCovertidaUSD));
-                    } else {
-                        System.out.println("No se encontro la tasa de cambio para el dólar");
-                    }
+                case 2 :
+                    convertirMoneda("COP", "USD", cantidad);
                     break;
-                case 3 : 
-                default:
-                    System.out.println("Opción NO válida");
+                case 3 :
+                    convertirMoneda("USD", "ARS", cantidad);
+                    break;
+                case 4 :
+                    convertirMoneda("ARS","USD", cantidad);
                     break;
             }
         }
+        //Método que maneja la conversión de cualquier par de monedas
+        public static void convertirMoneda(String monedaOrigen, String monedaDestino, double cantidad){
+            ConsultaMoneda consulta = new ConsultaMoneda(monedaOrigen, cantidad);
+            Moneda moneda = consulta.conversorDeMoneda(monedaOrigen);
+
+            //Obtenemos la tasa de cambio de la moneda destino
+            Map<String, Double> conversioRates = moneda.getConversion_rates();
+            Double tasaDestino = conversioRates.get(monedaDestino);
+
+            System.out.println(tasaDestino);
+
+            if (tasaDestino != null){
+                double cantidadConvertida;
+                if (monedaOrigen.equals("USD")){
+                    cantidadConvertida = (cantidad * tasaDestino);
+                    System.out.println(String.format("De %s a %s equivale a: %.2f %s"
+                            ,monedaOrigen, monedaDestino, cantidadConvertida, monedaOrigen));
+                } else {
+                    cantidadConvertida = cantidad * tasaDestino;
+                    System.out.println(String.format("De %s a %s equivale a: %.2f %s"
+                            ,monedaOrigen, monedaDestino, cantidadConvertida, monedaOrigen));
+                }
+
+            } else {
+                System.out.println("¡Error!, no se pudo realizar la conversión");
+            }
+        }
     }
+    /*double cantidadConvertida = monedaOrigen.equals("USD")
+            ? cantidad * tasaDestino
+            : cantidad / tasaDestino;
+                System.out.println(String.format("De %s a %s equivale a: %.2f %s"
+            ,monedaOrigen, monedaDestino, cantidadConvertida, monedaOrigen));*/
