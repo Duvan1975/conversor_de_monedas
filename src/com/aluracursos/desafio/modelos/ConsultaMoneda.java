@@ -21,7 +21,8 @@ public class ConsultaMoneda {
     public Moneda conversorDeMoneda (String itemMoneda){
 
         URI direccion = URI.create(
-                "https://v6.exchangerate-api.com/v6/90630bcfb8cf39cf41f573cf/latest/"+itemMoneda);
+                "https://v6.exchangerate-api.com/v6/90630bcfb8cf39cf41f573cf/latest/"
+                        +itemMoneda);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(direccion)
