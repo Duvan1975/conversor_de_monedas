@@ -34,7 +34,7 @@ public class ConsultaMoneda {
                     .send(request, HttpResponse.BodyHandlers.ofString());
             //Imprime todo el cuerpo de la API
             //System.out.println(response.body());
-        } catch (Exception e) {
+        } catch (Exception  e) {
             throw new RuntimeException("No se encontró la moneda");
         }
         return new Gson().fromJson(response.body(), Moneda.class);

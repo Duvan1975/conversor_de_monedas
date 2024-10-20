@@ -14,11 +14,4 @@ public class Moneda {
         return conversion_rates;
     }
 
-    @Override
-    public String toString() {
-        return "Moneda{" +
-                "base_code='" + base_code + '\'' +
-                ", conversion_rates=" + conversion_rates +
-                '}';
-    }
 }
