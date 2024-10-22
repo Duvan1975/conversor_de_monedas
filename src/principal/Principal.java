@@ -1,14 +1,19 @@
 package principal;
 
 import com.aluracursos.desafio.modelos.ConsultaMoneda;
-import com.aluracursos.desafio.modelos.Moneda;
+import com.aluracursos.desafio.modelos.ConversorDeMoneda;
+import com.aluracursos.desafio.modelos.GeneradorDeHistorial;
 
 import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
+import static com.aluracursos.desafio.modelos.ConversorDeMoneda.convertirMoneda;
+
 public class Principal {
     public static void main(String[] args) {
+        GeneradorDeHistorial generadorDeHistorial = new GeneradorDeHistorial();
+
         //Crear un objeto scanner para capturar la entrada del usuario
         Scanner teclado = new Scanner(System.in);
         int indice = 0;
@@ -48,6 +53,7 @@ public class Principal {
             entradaValida = false; //Reiniciamos la variable para reutilizarla en el bucle
             double cantidad = 0;
 
+
             //Pedir al usuario que ingrese la cantidad de dinero a convertir
             while (!entradaValida){
                 try{
@@ -63,88 +69,99 @@ public class Principal {
                     teclado.next();
                 }
             }
+            double cantidadConvertida;
+
             //Relizar la conversión según la opción
             switch (indice){
+
+
                 case 1 :
                     System.out.println("Realizando conversión... de dólares a pesos colombianos");
                     convertirMoneda("USD", "COP", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "USD","COP", cantidad, cantidadConvertida));
                     break;
                 case 2 :
                     System.out.println("Realizando conversión... de pesos colombianos a dolares");
                     convertirMoneda("COP", "USD", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "COP", "USD", cantidad, cantidadConvertida));
                     break;
-                case 3 :
+                /*case 3 :
                     System.out.println("Realizando conversión... de dólares a pesos argentinos");
                     convertirMoneda("USD", "ARS", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
+
                     break;
                 case 4 :
                     System.out.println("Realizando conversión... de pesos argentinos a dolares");
                     convertirMoneda("ARS","USD", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
                     break;
                 case 5 :
                     System.out.println("Realizando conversión... de dólares a Boliviano bolivianos");
                     convertirMoneda("USD","BOB", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
                     break;
                 case 6 :
                     System.out.println("Realizando conversión... de Boliviano bolivianos a dolares");
                     convertirMoneda("BOB","USD", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
                     break;
                 case 7 :
                     System.out.println("Realizando conversión... de dólares a Reales brasileños");
                     convertirMoneda("USD","BRL", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
                     break;
                 case 8 :
                     System.out.println("Realizando conversión... de Reales brasileños a dolares");
                     convertirMoneda("BRL","USD", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
                     break;
                 case 9 :
                     System.out.println("Realizando conversión... de dólares a pesos chilenos");
                     convertirMoneda("USD","CLP", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
                     break;
                 case 10 :
                     System.out.println("Realizando conversión... de pesos chilenos a dolares");
                     convertirMoneda("CLP","USD", cantidad);
-                    break;
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
+                    break;*/
             }
-            //Opciones para continuar o salir del menú
-            System.out.println("");
-            System.out.println("Opción:\n1 - Volver al Menú\n2 - Salir");
-            opcion = teclado.nextInt();
 
-            //validando las opciones
-            if (opcion == 1) {
-                entradaValida = false;
-            } else if (opcion == 2){
-                System.out.println("¡Gracias! por utilizar nuestro conversor de moneda");
-                break;
-            } else {
+            //Opciones para continuar o salir del menú
+            try {
+                System.out.println("");
+                System.out.println("Opción:\n1 - Volver al Menú\n2 - Salir");
+                opcion = teclado.nextInt();
+
+                //validando las opciones
+                if (opcion == 1) {
+                    entradaValida = false;
+                } else if (opcion == 2){
+                    System.out.println("¡Gracias! por utilizar nuestro conversor de moneda");
+                    break;
+                }
+            } catch (InputMismatchException e) {
                 System.out.println("Opción NO válida, ¡Hasta pronto!");
                 break;
             }
-        }
-    }
-    //Metodo que maneja la conversión de cualquier par de monedas
-    public static void convertirMoneda(String monedaOrigen, String monedaDestino, double cantidad){
-        ConsultaMoneda consulta = new ConsultaMoneda(monedaOrigen, cantidad);
-        Moneda moneda = consulta.conversorDeMoneda(monedaOrigen);
 
-        //Obtenemos la tasa de cambio de la moneda destino
-        Map<String, Double> conversioRates = moneda.getConversion_rates();
-        Double tasaDestino = conversioRates.get(monedaDestino);
-
-        if (tasaDestino != null){
-            double cantidadConvertida;
-            if (monedaOrigen.equals("USD")){
-                cantidadConvertida = (cantidad * tasaDestino);
-                System.out.println(String.format("%.2f dólares equivalen a: %.2f %s"
-                        ,cantidad, cantidadConvertida, monedaDestino));
-            } else {
-                cantidadConvertida = cantidad * tasaDestino;
-                System.out.println(String.format("%.2f %s equivalen a: %.2f dólares estadounidenses"
-                        ,cantidad, monedaOrigen, cantidadConvertida));
-            }
-        } else {
-            System.out.println("¡Error!, no se pudo realizar la conversión");
         }
+
+        generadorDeHistorial.guardarHistorial();
+
+        /*
+        //Crear el historial
+        GeneradorDeHistorial generadorDeHistorial = new GeneradorDeHistorial();
+        //Realizar una conversión
+        ConversorDeMoneda conversion = new ConversorDeMoneda("USD", "COP", 100, 200, "2024");
+        conversion.getFechaConversion();
+        //Agregar la conversion al historial
+        generadorDeHistorial.agregarConversion(conversion);
+        //Guardar el historial en un archivo JSON
+        generadorDeHistorial.guardarHistorial();*/
     }
+
 }
