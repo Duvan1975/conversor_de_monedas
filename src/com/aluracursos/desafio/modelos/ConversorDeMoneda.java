@@ -20,19 +20,18 @@ public class ConversorDeMoneda {
                 cantidadConvertida = (cantidad * tasaDestino);
                 System.out.println(String.format("%.2f dólares equivalen a: %.2f %s"
                         ,cantidad, cantidadConvertida, monedaDestino));
-
+                return cantidadConvertida;
+                //System.out.println("\nÚltima actualización de la tasa de cambio: " + moneda.getTime_last_update_utc());
             } else {
                 cantidadConvertida = cantidad * tasaDestino;
                 System.out.println(String.format("%.2f %s equivalen a: %.2f dólares estadounidenses"
                         ,cantidad, monedaOrigen, cantidadConvertida));
                 return cantidadConvertida;
             }
-            System.out.println("\nÚltima actualización de la tasa de cambio: " + moneda.getTime_last_update_utc());
         } else {
             System.out.println("¡Error!, no se pudo realizar la conversión");
-            return 0;
         }
-        return cantidad;
+        return 0;
     }
 
     private String monedaOrigen;
@@ -59,13 +58,7 @@ public class ConversorDeMoneda {
         return cantidad;
     }
 
-    public void setCantidadConvertida(double cantidadConvertida) {
-        this.cantidadConvertida = cantidadConvertida;
-    }
-
     public double getCantidadConvertida() {
         return cantidadConvertida;
     }
-
-
 }

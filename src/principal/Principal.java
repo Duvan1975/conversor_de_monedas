@@ -3,15 +3,22 @@ package principal;
 import com.aluracursos.desafio.modelos.ConsultaMoneda;
 import com.aluracursos.desafio.modelos.ConversorDeMoneda;
 import com.aluracursos.desafio.modelos.GeneradorDeHistorial;
+import com.aluracursos.desafio.modelos.Moneda;
 
 import java.util.InputMismatchException;
-import java.util.Map;
 import java.util.Scanner;
 
 import static com.aluracursos.desafio.modelos.ConversorDeMoneda.convertirMoneda;
 
 public class Principal {
     public static void main(String[] args) {
+        //Crear una instancia de la clase ConversorDeMoneda
+        ConsultaMoneda consultaMoneda = new ConsultaMoneda("USD",0 );
+
+        //Capturar la fecha de actualización desde la clase Moneda
+        Moneda moneda = consultaMoneda.conversorDeMoneda("USD");
+        //Captura la fecha
+        String fechaActualizacion = moneda.getTime_last_update_utc();
         GeneradorDeHistorial generadorDeHistorial = new GeneradorDeHistorial();
 
         //Crear un objeto scanner para capturar la entrada del usuario
@@ -53,7 +60,6 @@ public class Principal {
             entradaValida = false; //Reiniciamos la variable para reutilizarla en el bucle
             double cantidad = 0;
 
-
             //Pedir al usuario que ingrese la cantidad de dinero a convertir
             while (!entradaValida){
                 try{
@@ -69,66 +75,73 @@ public class Principal {
                     teclado.next();
                 }
             }
-            double cantidadConvertida;
+            double cantidadConvertida = 0;
 
             //Relizar la conversión según la opción
             switch (indice){
 
-
                 case 1 :
                     System.out.println("Realizando conversión... de dólares a pesos colombianos");
-                    convertirMoneda("USD", "COP", cantidad);
+                    cantidadConvertida = convertirMoneda("USD", "COP", cantidad);
                     generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
                             "USD","COP", cantidad, cantidadConvertida));
                     break;
                 case 2 :
                     System.out.println("Realizando conversión... de pesos colombianos a dolares");
-                    convertirMoneda("COP", "USD", cantidad);
+                    cantidadConvertida = convertirMoneda("COP", "USD", cantidad);
                     generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
                             "COP", "USD", cantidad, cantidadConvertida));
                     break;
-                /*case 3 :
+                case 3 :
                     System.out.println("Realizando conversión... de dólares a pesos argentinos");
-                    convertirMoneda("USD", "ARS", cantidad);
-                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
-
+                    cantidadConvertida = convertirMoneda("USD", "ARS", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "USD", "ARS", cantidad, cantidadConvertida));
                     break;
                 case 4 :
                     System.out.println("Realizando conversión... de pesos argentinos a dolares");
-                    convertirMoneda("ARS","USD", cantidad);
-                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
+                    cantidadConvertida = convertirMoneda("ARS","USD", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "ARS", "USB", cantidad, cantidadConvertida));
                     break;
                 case 5 :
                     System.out.println("Realizando conversión... de dólares a Boliviano bolivianos");
-                    convertirMoneda("USD","BOB", cantidad);
-                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
+                    cantidadConvertida = convertirMoneda("USD","BOB", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "USD", "BOB", cantidad, cantidadConvertida));
                     break;
                 case 6 :
                     System.out.println("Realizando conversión... de Boliviano bolivianos a dolares");
-                    convertirMoneda("BOB","USD", cantidad);
-                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
+                    cantidadConvertida = convertirMoneda("BOB","USD", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "BOB", "USD", cantidad, cantidadConvertida));
                     break;
                 case 7 :
                     System.out.println("Realizando conversión... de dólares a Reales brasileños");
-                    convertirMoneda("USD","BRL", cantidad);
-                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
+                    cantidadConvertida = convertirMoneda("USD","BRL", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "USD", "BRL", cantidad, cantidadConvertida));
                     break;
                 case 8 :
                     System.out.println("Realizando conversión... de Reales brasileños a dolares");
-                    convertirMoneda("BRL","USD", cantidad);
-                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
+                    cantidadConvertida = convertirMoneda("BRL","USD", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "BRL", "USD",cantidad, cantidadConvertida));
                     break;
                 case 9 :
                     System.out.println("Realizando conversión... de dólares a pesos chilenos");
-                    convertirMoneda("USD","CLP", cantidad);
-                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
+                    cantidadConvertida= convertirMoneda("USD","CLP", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "USD", "CLP", cantidad, cantidadConvertida));
                     break;
                 case 10 :
                     System.out.println("Realizando conversión... de pesos chilenos a dolares");
-                    convertirMoneda("CLP","USD", cantidad);
-                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda());
-                    break;*/
+                    cantidadConvertida = convertirMoneda("CLP","USD", cantidad);
+                    generadorDeHistorial.agregarConversion(new ConversorDeMoneda(
+                            "CLP", "USD", cantidad, cantidadConvertida));
+                    break;
             }
+            System.out.println("\nÚltima Actualización: " + fechaActualizacion);
 
             //Opciones para continuar o salir del menú
             try {
@@ -142,26 +155,14 @@ public class Principal {
                 } else if (opcion == 2){
                     System.out.println("¡Gracias! por utilizar nuestro conversor de moneda");
                     break;
+                } else {
+                    System.out.println("Ingresaste un número diferente a las opciones, ¡Hasta pronto!");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Opción NO válida, ¡Hasta pronto!");
                 break;
             }
-
         }
-
         generadorDeHistorial.guardarHistorial();
-
-        /*
-        //Crear el historial
-        GeneradorDeHistorial generadorDeHistorial = new GeneradorDeHistorial();
-        //Realizar una conversión
-        ConversorDeMoneda conversion = new ConversorDeMoneda("USD", "COP", 100, 200, "2024");
-        conversion.getFechaConversion();
-        //Agregar la conversion al historial
-        generadorDeHistorial.agregarConversion(conversion);
-        //Guardar el historial en un archivo JSON
-        generadorDeHistorial.guardarHistorial();*/
     }
-
 }

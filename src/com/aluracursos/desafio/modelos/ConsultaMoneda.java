@@ -16,7 +16,6 @@ public class ConsultaMoneda {
         this.moneda = moneda;
         this.valor = valor;
     }
-
     public Moneda conversorDeMoneda (String itemMoneda){
 
         URI direccion = URI.create(
@@ -33,25 +32,10 @@ public class ConsultaMoneda {
                     .send(request, HttpResponse.BodyHandlers.ofString());
             //Imprime todo el cuerpo de la API
             //System.out.println(response.body());
-        } catch (Exception  e) {
+        } catch (Exception e) {
+            System.out.println("Sin red");
             throw new RuntimeException("No se encontró la moneda");
         }
         return new Gson().fromJson(response.body(), Moneda.class);
-    }
-
-    public String getMoneda() {
-        return moneda;
-    }
-
-    public void setMoneda(String moneda) {
-        this.moneda = moneda;
-    }
-
-    public double getValor() {
-        return valor;
-    }
-
-    public void setValor(double valor) {
-        this.valor = valor;
     }
 }

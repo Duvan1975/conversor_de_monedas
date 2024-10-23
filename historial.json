@@ -1,8 +1,8 @@
 [
   {
-    "MonedaOrigen": "COP",
-    "MonedaDestino": "USD",
-    "Cantidad": 10000.0,
-    "CantidadConvertida": 0.0
+    "MonedaOrigen": "USD",
+    "MonedaDestino": "COP",
+    "Cantidad": 2.0,
+    "CantidadConvertida": 8526.3416
   }
 ]
